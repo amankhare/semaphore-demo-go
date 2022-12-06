@@ -71,4 +71,4 @@ after_pipeline:
           - test-results gen-pipeline-report
       - name: 'Job #2'
         commands:
-          - echo "My task is done"
+          - exit 1
