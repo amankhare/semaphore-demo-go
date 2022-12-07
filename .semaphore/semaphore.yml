@@ -43,4 +43,4 @@ after_pipeline:
       - name: 'Job #2'
         commands:
           - cache restore A
-          - 'cache restore A && cache delete A && test -f abc* '
+          - 'cache restore A && cache delete A && ! (test -f abc.txt) '
