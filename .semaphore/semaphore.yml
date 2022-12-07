@@ -22,7 +22,7 @@ blocks:
       epilogue:
         always:
           commands:
-            - cache restore A
+            - cache delete A
             - cache restore A
         on_pass:
           commands:
@@ -45,7 +45,7 @@ after_pipeline:
           - echo $SEMAPHORE_WORKFLOW_TRIGGERED_BY_ME
           - echo $SEMAPHORE_WORKFLOW_TRIGGERED_BY_ME2
           - echo $SEMAPHORE_WORKFLOW_TRIGGERED_BY_ME3
-          - artifact pull workflow abc2.txt
+          - artifact yank workflow abc2.txt
           - ls /tmp
           - ls
           - artifact yank workflow act2.txt
