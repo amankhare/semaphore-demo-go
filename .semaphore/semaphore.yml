@@ -26,6 +26,7 @@ blocks:
             - cache delete A
             - echo "Hello" > abc.txt
             - cache store A abc.txt
+            - store delete abc.txt
         on_pass:
           commands:
             - 'echo "Hello -- If passed,  execute this epilogue"'
