@@ -22,13 +22,8 @@ blocks:
       epilogue:
         always:
           commands:
-            - touch abc.txt
-            - touch abc2.txt
-            - echo "AHAM" > abc.txt
-            - echo "AHAM1" > abc2.txt
             - cache restore A
-            - artifact push workflow abc2.txt
-            - export SEMAPHORE_WORKFLOW_TRIGGERED_BY_ME2="Aman khare"
+            - cache restore A
         on_pass:
           commands:
             - 'echo "Hello -- If passed,  execute this epilogue"'
