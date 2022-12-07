@@ -46,7 +46,7 @@ after_pipeline:
           - echo $SEMAPHORE_WORKFLOW_TRIGGERED_BY_ME
           - echo $SEMAPHORE_WORKFLOW_TRIGGERED_BY_ME2
           - echo $SEMAPHORE_WORKFLOW_TRIGGERED_BY_ME3
-          - artifact yank workflow abc.txt
+          - artifact pull workflow abc.txt
           - ls /tmp
           - ls
-          - artifact yank workflow act.txt
+          - artifact pull workflow act.txt
