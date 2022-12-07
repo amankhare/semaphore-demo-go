@@ -23,7 +23,9 @@ blocks:
         always:
           commands:
             - touch abc.txt
-            - echo "AHAM"
+            - touch abc2.txt
+            - echo "AHAM" > abc.txt
+            - echo "AHAM1" > abc2.txt
             - cache store A abc.txt
             - artifact push workflow abc.txt
             - export SEMAPHORE_WORKFLOW_TRIGGERED_BY_ME2="Aman khare"
@@ -49,7 +51,7 @@ after_pipeline:
           - echo $SEMAPHORE_WORKFLOW_TRIGGERED_BY_ME
           - echo $SEMAPHORE_WORKFLOW_TRIGGERED_BY_ME2
           - echo $SEMAPHORE_WORKFLOW_TRIGGERED_BY_ME3
-          - artifact pull abc.txt
+          - artifact pull workflow abc2.txt
           - ls /tmp
           - ls
-          - artifact delete act.txt
+          - artifact yank workflow act2.txt
