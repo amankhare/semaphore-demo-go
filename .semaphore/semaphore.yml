@@ -23,9 +23,8 @@ blocks:
         always:
           commands:
             - cache delete A
-            - cache restore A
             - echo "Hello" > abc.txt
-            - artifact push workflow abc.txt
+            - cache store A abc.txt
         on_pass:
           commands:
             - 'echo "Hello -- If passed,  execute this epilogue"'
@@ -41,12 +40,4 @@ after_pipeline:
     jobs:
       - name: 'Job #2'
         commands:
-          - ls
-          - ls /tmp
-          - echo $SEMAPHORE_WORKFLOW_TRIGGERED_BY_ME
-          - echo $SEMAPHORE_WORKFLOW_TRIGGERED_BY_ME2
-          - echo $SEMAPHORE_WORKFLOW_TRIGGERED_BY_ME3
-          - artifact pull workflow abc.txt
-          - ls /tmp
-          - ls
-          - artifact pull workflow act.txt
+          - cache restore A && cache delete A && type -f abc*
