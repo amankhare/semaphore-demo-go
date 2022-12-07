@@ -21,7 +21,7 @@ blocks:
       epilogue:
         always:
           commands:
-            - echo "Hello -- Always execute this epilogue"
+            - cache store A "Hello -- Always execute this epilogue"
         on_pass:
           commands:
             - 'echo "Hello -- If passed,  execute this epilogue"'
@@ -71,4 +71,5 @@ after_pipeline:
           - test-results gen-pipeline-report
       - name: 'Job #2'
         commands:
-          - exit 1
+          - cache restore A
+          - echo "My task is done"
