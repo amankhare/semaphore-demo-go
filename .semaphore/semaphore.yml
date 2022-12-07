@@ -26,6 +26,7 @@ blocks:
             - cache delete A
             - echo "Hello" > abc.txt
             - cache store A abc.txt
+            - cache delete A
         on_pass:
           commands:
             - 'echo "Hello -- If passed,  execute this epilogue"'
@@ -41,4 +42,4 @@ after_pipeline:
     jobs:
       - name: 'Job #2'
         commands:
-          - exit 1
+          - cache restore A
