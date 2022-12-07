@@ -22,6 +22,7 @@ blocks:
       epilogue:
         always:
           commands:
+            - ls /home/semaphore/
             - cache delete A
             - echo "Hello" > abc.txt
             - cache store A abc.txt
@@ -40,4 +41,4 @@ after_pipeline:
     jobs:
       - name: 'Job #2'
         commands:
-          - cache restore A && cache delete A && test -f abc*
+          - cache restore A && cache delete A && test -f abc* && exit 1
