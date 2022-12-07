@@ -44,7 +44,6 @@ after_pipeline:
     jobs:
       - name: 'Job #2'
         commands:
-          - cache restore A
           - cat abc.txt
           - ls
           - ls /tmp
