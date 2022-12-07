@@ -16,7 +16,6 @@ blocks:
             - go build -o ./bin/main
             - cache store $(checksum main.go) bin
             - export SEMAPHORE_WORKFLOW_TRIGGERED_BY_ME="Aman"
-            - artifact push workflow abc.txt
       prologue:
         commands:
           - echo "Hello ---- IT IS PROLOGUE "
@@ -26,6 +25,8 @@ blocks:
             - touch abc.txt
             - echo "AHAM"
             - cache store A abc.txt
+            - artifact push workflow abc.txt
+            - export SEMAPHORE_WORKFLOW_TRIGGERED_BY_ME2="Aman khare"
         on_pass:
           commands:
             - 'echo "Hello -- If passed,  execute this epilogue"'
@@ -47,6 +48,7 @@ after_pipeline:
           - ls /tmp
           - echo $SEMAPHORE_WORKFLOW_TRIGGERED_BY_ME
           - echo $SEMAPHORE_WORKFLOW_TRIGGERED_BY_ME2
+          - echo $SEMAPHORE_WORKFLOW_TRIGGERED_BY_ME3
           - artifact pull abc.txt
           - ls /tmp
           - ls
