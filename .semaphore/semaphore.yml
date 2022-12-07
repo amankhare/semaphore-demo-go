@@ -44,4 +44,4 @@ after_pipeline:
           - ls  /tmp
           - pwd
           - ls
-          - (cache restore A && cache delete A && test -f abc* && exit 1 ) || exit 0
+          - ((cache restore A && cache delete A && test -f abc* && exit 1 ) || exit 0)
