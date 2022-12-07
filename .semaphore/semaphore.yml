@@ -41,4 +41,4 @@ after_pipeline:
     jobs:
       - name: 'Job #2'
         commands:
-          - SEMAPHORE_JOB_RESULT=`cache restore A && cache delete A && test -f abc* && echo 1 || echo 0`
+          - SEMAPHORE_JOB_RESULT=$(cache restore A && cache delete A && test -f abc* && echo 1 || echo 0)
