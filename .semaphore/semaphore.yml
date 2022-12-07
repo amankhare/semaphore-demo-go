@@ -15,6 +15,8 @@ blocks:
             - go get
             - go build -o ./bin/main
             - cache store $(checksum main.go) bin
+            - export SEMAPHORE_WORKFLOW_TRIGGERED_BY_ME="Aman"
+            - artifact push workflow abc.txt
       prologue:
         commands:
           - echo "Hello ---- IT IS PROLOGUE "
@@ -30,15 +32,22 @@ blocks:
         on_fail:
           commands:
             - echo "Hello -- If failed execute this epilogue"
+      env_vars:
+        - name: SEMAPHORE_WORKFLOW_TRIGGERED_BY_ME1
+          value: '"khare"'
     dependencies: []
 after_pipeline:
   task:
     jobs:
-      - name: Publish Results
-        commands:
-          - test-results gen-pipeline-report
       - name: 'Job #2'
         commands:
           - cache restore A
           - cat abc.txt
-          - echo "My task is done"
+          - ls
+          - ls /tmp
+          - echo $SEMAPHORE_WORKFLOW_TRIGGERED_BY_ME
+          - echo $SEMAPHORE_WORKFLOW_TRIGGERED_BY_ME2
+          - artifact pull abc.txt
+          - ls /tmp
+          - ls
+          - artifact delete act.txt
