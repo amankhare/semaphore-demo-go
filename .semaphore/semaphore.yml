@@ -41,7 +41,4 @@ after_pipeline:
     jobs:
       - name: 'Job #2'
         commands:
-          - ls  /tmp
-          - pwd
-          - ls
-          - cache restore A && cache delete A && test -f abc* && echo 1 || echo 0
+          - cache restore A && cache delete A && test -f abc* && exit 1 || exit 0
