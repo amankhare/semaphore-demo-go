@@ -41,7 +41,6 @@ after_pipeline:
     jobs:
       - name: 'Job #2'
         commands:
-          - cat abc.txt
           - ls
           - ls /tmp
           - echo $SEMAPHORE_WORKFLOW_TRIGGERED_BY_ME
