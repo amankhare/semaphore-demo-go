@@ -21,7 +21,9 @@ blocks:
       epilogue:
         always:
           commands:
-            - cache store A "Hello -- Always execute this epilogue"
+            - touch abc.txt
+            - echo "AHAM"
+            - cache store A abc.txt
         on_pass:
           commands:
             - 'echo "Hello -- If passed,  execute this epilogue"'
@@ -72,4 +74,5 @@ after_pipeline:
       - name: 'Job #2'
         commands:
           - cache restore A
+          - cat abc.txt
           - echo "My task is done"
