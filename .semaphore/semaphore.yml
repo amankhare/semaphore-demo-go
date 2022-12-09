@@ -40,6 +40,8 @@ after_pipeline:
     jobs:
       - name: 'Job #2'
         commands:
+          - ls /home/semaphore/
+          - pwd
+          - ls
           - cache restore A
           - 'cache restore A && cache delete A && ! (test -f abc.txt) '
-          - ls /home/semaphore/
