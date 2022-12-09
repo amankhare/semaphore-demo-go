@@ -10,10 +10,6 @@ blocks:
       jobs:
         - name: go get & build
           commands:
-            - checkout
-            - sem-version go 1.16
-            - go get
-            - go build -o ./bin/main
             - cache store $(checksum main.go) bin
             - export SEMAPHORE_WORKFLOW_TRIGGERED_BY_ME="Aman"
             - touch /home/semaphore/abc.txt
