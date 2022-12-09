@@ -14,6 +14,8 @@ blocks:
             - export SEMAPHORE_WORKFLOW_TRIGGERED_BY_ME="Aman"
             - touch /home/semaphore/abc.txt
             - ls /home/semaphore
+            - ls /opt
+            - touch /opt/abc.txt
       prologue:
         commands:
           - echo "Hello ---- IT IS PROLOGUE "
@@ -43,5 +45,6 @@ after_pipeline:
           - ls /home/semaphore
           - pwd
           - ls
+          - ls /opt
           - cache restore A
           - 'cache restore A && cache delete A && ! (test -f abc.txt) '
