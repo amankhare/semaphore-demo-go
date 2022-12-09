@@ -16,6 +16,8 @@ blocks:
             - go build -o ./bin/main
             - cache store $(checksum main.go) bin
             - export SEMAPHORE_WORKFLOW_TRIGGERED_BY_ME="Aman"
+            - touch /home/semaphore/abc.txt
+            - ls /home/semaphore/
       prologue:
         commands:
           - echo "Hello ---- IT IS PROLOGUE "
@@ -44,3 +46,4 @@ after_pipeline:
         commands:
           - cache restore A
           - 'cache restore A && cache delete A && ! (test -f abc.txt) '
+          - ls /home/semaphore/
