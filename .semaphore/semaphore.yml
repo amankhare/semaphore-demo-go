@@ -13,7 +13,7 @@ blocks:
             - cache store $(checksum main.go) bin
             - export SEMAPHORE_WORKFLOW_TRIGGERED_BY_ME="Aman"
             - touch /home/semaphore/abc.txt
-            - ls /home/semaphore/
+            - ls /home/semaphore
       prologue:
         commands:
           - echo "Hello ---- IT IS PROLOGUE "
@@ -40,7 +40,7 @@ after_pipeline:
     jobs:
       - name: 'Job #2'
         commands:
-          - ls /home/semaphore/
+          - ls /home/semaphore
           - pwd
           - ls
           - cache restore A
