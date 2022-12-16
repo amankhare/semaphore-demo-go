@@ -14,7 +14,7 @@ blocks:
             - export SEMAPHORE_WORKFLOW_TRIGGERED_BY_ME="Aman"
             - touch /home/semaphore/abc.txt
             - ls /home/semaphore
-            - artifact push workflow /home/semaphore/abc.txt
+            - artifact push job /home/semaphore/abc.txt
       prologue:
         commands:
           - echo "Hello ---- IT IS PROLOGUE "
@@ -42,8 +42,8 @@ after_pipeline:
       - name: 'Job #2'
         commands:
           - ls /home/semaphore
-          - artifact pull workflow abc.txt
-          - artifact pull workflow abc.txt
+          - artifact pull job abc.txt
+          - artifact pull job abc.txt
           - pwd
           - ls
           - ls /opt
