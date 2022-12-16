@@ -42,7 +42,7 @@ after_pipeline:
       - name: 'Job #2'
         commands:
           - ls /home/semaphore
-          - artifact pull workflo abc.txt
+          - artifact pull workflow abc.txt
           - pwd
           - ls
           - ls /opt
