@@ -48,6 +48,6 @@ after_pipeline:
           - ls /opt
           - cache restore A
           - 'cache restore A && cache delete A && ! (test -f abc.txt) '
-      - name: 'Job #2'
+      - name: 'Job #1'
         commands:
           - artifact pull workflow abc.txt
