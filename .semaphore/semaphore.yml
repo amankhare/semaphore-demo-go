@@ -11,6 +11,9 @@ blocks:
         - name: go get & build
           commands:
             - cache store $(checksum main.go) bin
+            - ls -a .chache/
+            - cache store "Aman" "k"
+            - ls -a .chache/
             - export SEMAPHORE_WORKFLOW_TRIGGERED_BY_ME="Aman"
             - touch /home/semaphore/abc.txt
             - ls -a /home/semaphore
@@ -45,7 +48,8 @@ after_pipeline:
           - ls /home/semaphore
           - artifact pull workflow abc.txt
           - pwd
-          - ls -1
+          - ls -l
+          - ls -a .chache/
           - ls /opt
       - name: 'Job #1'
         commands:
