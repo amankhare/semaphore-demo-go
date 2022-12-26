@@ -13,7 +13,7 @@ blocks:
             - cache store $(checksum main.go) bin
             - export SEMAPHORE_WORKFLOW_TRIGGERED_BY_ME="Aman"
             - touch /home/semaphore/abc.txt
-            - ls /home/semaphore
+            - ls -a /home/semaphore
             - artifact push workflow /home/semaphore/abc.txt
       prologue:
         commands:
@@ -41,10 +41,11 @@ after_pipeline:
     jobs:
       - name: 'Job #2'
         commands:
+          - echo "$SEMAPHORE_WORKFLOW_TRIGGERED_BY_ME"
           - ls /home/semaphore
           - artifact pull workflow abc.txt
           - pwd
-          - ls
+          - ls -1
           - ls /opt
       - name: 'Job #1'
         commands:
