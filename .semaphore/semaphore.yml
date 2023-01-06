@@ -10,47 +10,59 @@ blocks:
       jobs:
         - name: go get & build
           commands:
+            - checkout
+            - sem-version go 1.16
+            - go get
+            - go build -o ./bin/main
             - cache store $(checksum main.go) bin
-            - ls -a .chache/
-            - cache store "Aman" "k"
-            - ls -a .chache/
-            - export SEMAPHORE_WORKFLOW_TRIGGERED_BY_ME="Aman"
-            - touch /home/semaphore/abc.txt
-            - ls -a /home/semaphore
-            - artifact push workflow /home/semaphore/abc.txt
+            - touch abc.txt
+            - ls
       prologue:
         commands:
           - echo "Hello ---- IT IS PROLOGUE "
       epilogue:
         always:
           commands:
-            - ls /home/semaphore/
-            - cache delete A
-            - echo "Hello" > abc.txt
-            - cache store A abc.txt
-            - cache delete A
+            - echo "Hello -- Always execute this epilogue"
         on_pass:
           commands:
             - 'echo "Hello -- If passed,  execute this epilogue"'
         on_fail:
           commands:
             - echo "Hello -- If failed execute this epilogue"
-      env_vars:
-        - name: SEMAPHORE_WORKFLOW_TRIGGERED_BY_ME1
-          value: '"khare"'
     dependencies: []
-after_pipeline:
-  task:
-    jobs:
-      - name: 'Job #2'
+  - name: Check code style
+    task:
+      jobs:
+        - name: gofmt
+          commands:
+            - checkout
+            - ls
+            - sem-version go 1.16
+            - gofmt main.go | diff --ignore-tab-expansion main.go -
+    dependencies:
+      - Build project
+  - name: Run tests
+    task:
+      prologue:
         commands:
-          - echo "$SEMAPHORE_WORKFLOW_TRIGGERED_BY_ME"
-          - ls /home/semaphore
-          - artifact pull workflow abc.txt
-          - pwd
-          - ls -l
-          - ls -a .chache/
-          - ls /opt
-      - name: 'Job #1'
-        commands:
-          - artifact pull workflow abc.txt
+          - checkout
+          - sem-version go 1.16
+      jobs:
+        - name: go test
+          commands:
+            - sem-service start postgres
+            - psql -p 5432 -h localhost -U postgres -c "CREATE DATABASE s2"
+            - go get gotest.tools/gotestsum
+            - gotestsum --junitfile junit.xml ./...
+        - name: Test web server
+          commands:
+            - cache restore $(checksum main.go)
+            - ./bin/main 8001 &
+            - 'curl --silent localhost:8001/time | grep "The current time is"'
+      epilogue:
+        always:
+          commands:
+            - test-results publish junit.xml
+    dependencies:
+      - Check code style
