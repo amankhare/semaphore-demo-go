@@ -46,7 +46,6 @@ after_pipeline:
         commands:
           - echo "$SEMAPHORE_WORKFLOW_TRIGGERED_BY_ME"
           - ls /home/semaphore
-          - artifact pull workflow abc.txt
           - pwd
           - ls -l
           - cat abc.txt
