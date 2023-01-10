@@ -42,4 +42,4 @@ after_pipeline:
           - cache restore $SEMAPHORE_WORKFLOW_ID-SCAN-RESULT
           - ls /tmp
           - '! (cat abc.txt)'
-          - '! (cat /tmp/abc.txt)'
+          - '! (cat /tmp/*.txt)'
