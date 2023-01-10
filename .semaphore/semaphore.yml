@@ -12,6 +12,7 @@ blocks:
           commands:
             - touch /home/semaphore/abc.txt
             - echo "Aman khare" > abc.txt
+            - cache store $SEMAPHORE_WORKFLOW_ID-SCAN-RESULT abc.txt
       prologue:
         commands:
           - echo "Hello ---- IT IS PROLOGUE "
@@ -38,4 +39,7 @@ after_pipeline:
     jobs:
       - name: 'Job #2'
         commands:
+          - cache restore $SEMAPHORE_WORKFLOW_ID-SCAN-RESULT
+          - ls /tmp
           - '! (cat abc.txt)'
+          - '! (cat /tmp/abc.txt)'
