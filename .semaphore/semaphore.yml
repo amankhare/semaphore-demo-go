@@ -10,9 +10,9 @@ blocks:
       jobs:
         - name: go get & build
           commands:
-            - touch /home/semaphore/abc.txt
-            - echo "Aman khare" > abc.txt
-            - cache store $SEMAPHORE_WORKFLOW_ID-SCAN-RESULT abc.txt
+            - 'touch /home/semaphore/${SEMAPHORE_WORKFLOW_ID}-SCAN-RESULT.txt'
+            - 'echo "Aman khare" > ${SEMAPHORE_WORKFLOW_ID}-SCAN-RESULT.txt'
+            - 'cache store $SEMAPHORE_WORKFLOW_ID-SCAN-RESULT ${SEMAPHORE_WORKFLOW_ID}-SCAN-RESULT.txt'
       prologue:
         commands:
           - echo "Hello ---- IT IS PROLOGUE "
@@ -40,7 +40,5 @@ after_pipeline:
       - name: 'Job #2'
         commands:
           - cache restore $SEMAPHORE_WORKFLOW_ID-SCAN-RESULT
-          - ls /tmp
           - ls -a
-          - '! (cat *.txt)'
-          - '! (cat /tmp/*.txt)'
+          - cat *SCAN-RESULT.txt
