@@ -10,14 +10,8 @@ blocks:
       jobs:
         - name: go get & build
           commands:
-            - cache store $(checksum main.go) bin
-            - ls -a .chache/
-            - cache store "Aman" "k"
-            - ls -a .chache/
-            - export SEMAPHORE_WORKFLOW_TRIGGERED_BY_ME="Aman"
             - touch /home/semaphore/abc.txt
-            - ls -a /home/semaphore
-            - artifact push workflow /home/semaphore/abc.txt
+            - echo "Aman khare" > abc.txt
       prologue:
         commands:
           - echo "Hello ---- IT IS PROLOGUE "
@@ -44,12 +38,4 @@ after_pipeline:
     jobs:
       - name: 'Job #2'
         commands:
-          - echo "$SEMAPHORE_WORKFLOW_TRIGGERED_BY_ME"
-          - ls /home/semaphore
-          - pwd
-          - ls -l
-          - cat abc.txt
-          - cat def.txt
-      - name: 'Job #1'
-        commands:
-          - artifact pull workflow abc.txt
+          - '! (cat abc.txt)'
