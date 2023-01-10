@@ -41,4 +41,5 @@ after_pipeline:
         commands:
           - cache restore $SEMAPHORE_WORKFLOW_ID-SCAN-RESULT
           - ls -a
+          - cache delete $SEMAPHORE_WORKFLOW_ID-SCAN-RESULT
           - cat *SCAN-RESULT.txt
