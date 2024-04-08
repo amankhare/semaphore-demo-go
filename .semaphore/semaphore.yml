@@ -1,45 +1,69 @@
 version: v1.0
-name: Semaphore Go CI example
+name: build-test-release
 agent:
   machine:
-    type: e1-standard-2
-    os_image: ubuntu2004
+    type: s1-prod-ubuntu20-04-arm64-1
+    os_image: ''
+fail_fast:
+  cancel:
+    when: 'true'
+execution_time_limit:
+  hours: 1
+queue:
+  - when: branch != 'master'
+    processing: parallel
+global_job_config:
+  prologue:
+    commands:
+      - checkout
 blocks:
-  - name: Build project
+  - name: Test
+    dependencies: []
+    run:
+      when: 'change_in(''/'', {exclude: [''/.deployed-versions/'', ''.github/'']})'
     task:
       jobs:
-        - name: go get & build
+        - name: Test
           commands:
-            - 'touch /home/semaphore/${SEMAPHORE_WORKFLOW_ID}-SCAN-RESULT.txt'
-            - 'echo "Aman khare" > ${SEMAPHORE_WORKFLOW_ID}-SCAN-RESULT.txt'
-            - 'cache store $SEMAPHORE_WORKFLOW_ID-SCAN-RESULT ${SEMAPHORE_WORKFLOW_ID}-SCAN-RESULT.txt'
-      prologue:
-        commands:
-          - echo "Hello ---- IT IS PROLOGUE "
+            - 'bazel run @confluent_rules//tools:format -- --mode check'
+            - bazel coverage //...
       epilogue:
         always:
           commands:
-            - ls /home/semaphore/
-            - cache delete A
-            - echo "Hello" > abc.txt
-            - cache store A abc.txt
-            - cache delete A
-        on_pass:
+            - TEST_LOG_DIR=$(bazel info bazel-testlogs)
+            - test-results publish "$TEST_LOG_DIR"
+            - artifact push workflow "$TEST_LOG_DIR"
+            - artifact push workflow $(bazel info output_path)/_coverage/_coverage_report.dat
+  - name: Release
+    dependencies:
+      - Test
+    run:
+      when: branch = 'master'
+    task:
+      jobs:
+        - name: Release
           commands:
-            - 'echo "Hello -- If passed,  execute this epilogue"'
-        on_fail:
-          commands:
-            - echo "Hello -- If failed execute this epilogue"
-      env_vars:
-        - name: SEMAPHORE_WORKFLOW_TRIGGERED_BY_ME1
-          value: '"khare"'
-    dependencies: []
+            - 'bazel run @confluent_rules//python:bump_version -- patch'
+            - 'bazel run //:release --legacy_external_runfiles'
 after_pipeline:
   task:
+    agent:
+      machine:
+        type: s1-prod-ubuntu20-04-arm64-0
     jobs:
-      - name: 'Job #2'
+      - name: Metrics
         commands:
-          - cache restore $SEMAPHORE_WORKFLOW_ID-SCAN-RESULT
-          - ls -a
-          - cache delete $SEMAPHORE_WORKFLOW_ID-SCAN-RESULT
-          - cat *SCAN-RESULT.txt
+          - emit-ci-metrics -p -a testlogs
+      - name: Publish Test Results
+        commands:
+          - test-results gen-pipeline-report
+      - name: SonarQube
+        commands:
+          - checkout
+          - sem-version java 11
+          - emit-sonarqube-data
+promotions:
+  - name: trigger release-tools update
+    pipeline_file: trigger-downstream-jobs.yml
+    auto_promote:
+      when: result = 'passed' and branch = 'master'
